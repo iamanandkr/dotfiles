@@ -113,4 +113,4 @@ source ~/git-completion.bash
 
 
 # git bare repository to manage dotfiles
-alias dotfiles="/usr/bin/git --git-dir=/home/${USER}/.dotfiles.git/ --work-tree=/home/${USER}"
+alias dotfiles="/usr/bin/git --git-dir=${HOME}/.dotfiles.git/ --work-tree=${HOME}"
