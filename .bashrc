@@ -85,26 +85,28 @@ if ! shopt -oq posix; then
 fi
 
 
-# Git stuff
+# Git specific
+# Many thanks: https://github.com/git/git/blob/master/contrib/completion/git-prompt.sh
+# Git prompt with working directory status and other helpful information.
 GIT_PS1_SHOWDIRTYSTATE=1
 GIT_PS1_SHOWSTASHSTATE=1
 GIT_PS1_SHOWUNTRACKEDFILES=1
+source ~/git-prompt.sh
+
+# Many thanks: https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+source ~/git-completion.bash
+
+# Many thanks: https://github.com/christopheryoung/dotfiles/blob/master/.bashrc
+git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit"
 
 green=$(tput setaf 2)
 blue=$(tput setaf 4)
 reset=$(tput sgr0)
 bold=$(tput bold)
-
-source ~/git-prompt.sh
-
 PS1='\[$blue$bold\]\w\[$reset\]\[$green$bold\]$(__git_ps1 " (%s)")\[$reset\]\$ '
-
-git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit"
-
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
-source ~/git-completion.bash
 
 
 # Many thanks: https://raw.github.com/mathiasbynens/dotfiles/master/.bash_profile
