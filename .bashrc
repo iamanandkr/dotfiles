@@ -70,13 +70,13 @@ fi
 GIT_PS1_SHOWDIRTYSTATE=1
 GIT_PS1_SHOWSTASHSTATE=1
 GIT_PS1_SHOWUNTRACKEDFILES=1
-source ${HOME}/git-prompt.sh
+source ${HOME}/vendor/git/git-prompt.sh
 
 # Many thanks: https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
-source ${HOME}/git-completion.bash
+source ${HOME}/vendor/git/git-completion.bash
 
 # Many thanks: https://github.com/christopheryoung/dotfiles/blob/master/.bashrc
 git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit"
@@ -100,8 +100,6 @@ alias dotfiles="/usr/bin/git --git-dir=${HOME}/.dotfiles.git/ --work-tree=${HOME
 # Many thanks:
 # https://github.com/junegunn/fzf/blob/master/shell/completion.bash
 # https://github.com/junegunn/fzf/blob/master/shell/key-bindings.bash
-# fzf key bindings and autocompletion for bash. Updated
-# completion.bash -> fzf_completion.bash
-# key-bindings.bash -> fzf_key-bindings.bash
-source ${HOME}/fzf_key-bindings.bash
-source ${HOME}/fzf_completion.bash
+# fzf key bindings and autocompletion for bash.
+source ${HOME}/vendor/fzf/key-bindings.bash
+source ${HOME}/vendor/fzf/completion.bash
