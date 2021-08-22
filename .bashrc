@@ -106,7 +106,7 @@ green=$(tput setaf 2)
 blue=$(tput setaf 4)
 reset=$(tput sgr0)
 bold=$(tput bold)
-PS1='\[$blue$bold\]\w\[$reset\]\[$green$bold\]$(__git_ps1 " (%s)")\[$reset\]\$ '
+PS1='\[$blue$bold\]\w\[$reset\]\[$green$bold\]$(__git_ps1 " (%s)")\[$reset\]\n\$ '
 
 
 # Many thanks: https://raw.github.com/mathiasbynens/dotfiles/master/.bash_profile
