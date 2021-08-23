@@ -97,5 +97,10 @@ alias dotfiles="/usr/bin/git --git-dir=${HOME}/.dotfiles.git/ --work-tree=${HOME
 # https://github.com/junegunn/fzf/blob/master/shell/completion.bash
 # https://github.com/junegunn/fzf/blob/master/shell/key-bindings.bash
 # fzf key bindings and autocompletion for bash.
-source ${HOME}/vendor/fzf/key-bindings.bash
-source ${HOME}/vendor/fzf/completion.bash
+if [ -f /usr/share/doc/fzf/examples/key-bindings.bash ]; then
+    . /usr/share/doc/fzf/examples/key-bindings.bash
+fi
+
+if [ -f /usr/share/doc/fzf/examples/completion.bash ]; then
+    . /usr/share/doc/fzf/examples/completion.bash
+fi
