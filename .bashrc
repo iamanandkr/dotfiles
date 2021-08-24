@@ -63,16 +63,27 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# Many thanks: https://github.com/git/git/blob/master/contrib/completion/git-completion.bash
-source ${HOME}/vendor/git/git-completion.bash
+# Many thanks: https://github.com/git/git/blob/master/contrib/completion/git-completion.bash (v2.33.0)
+if [ ! -f ${HOME}/code/git/git-completion.bash ]; then
+  echo "Downloading git-completion.bash file"
+  mkdir -p ${HOME}/code/git
+  curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash > ${HOME}/code/git/git-completion.bash
+fi
+source ${HOME}/code/git/git-completion.bash
 
 # Git specific
-# Many thanks: https://github.com/git/git/blob/master/contrib/completion/git-prompt.sh
+# Many thanks: https://github.com/git/git/blob/master/contrib/completion/git-prompt.sh (v2.33.0)
 # Git prompt with working directory status and other helpful information.
+if [ ! -f ${HOME}/code/git/git-prompt.sh ]; then
+  echo "Downloading git-prompt.sh file"
+  mkdir -p ${HOME}/code/git
+  curl https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh > ${HOME}/code/git/git-prompt.sh
+fi
+
 GIT_PS1_SHOWDIRTYSTATE=1
 GIT_PS1_SHOWSTASHSTATE=1
 GIT_PS1_SHOWUNTRACKEDFILES=1
-source ${HOME}/vendor/git/git-prompt.sh
+source ${HOME}/code/git/git-prompt.sh
 
 # Many thanks: https://github.com/christopheryoung/dotfiles/blob/master/.bashrc
 git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%C(bold blue)<%an>%Creset' --abbrev-commit"
