@@ -1,0 +1,6 @@
+# Many thanks: https://github.com/christopheryoung/dotfiles/blob/master/.functions
+
+# Quick help
+google() { xdg-open "http://www.google.com/search?q=$@"; }
+
+rtfm() { help $@ || man $@ || google; }
