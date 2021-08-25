@@ -3,4 +3,4 @@
 # Quick help
 google() { xdg-open "http://www.google.com/search?q=$@"; }
 
-rtfm() { help $@ || man $@ || google; }
+rtfm() { help $@ || man $@ || google $@; }
