@@ -10,4 +10,5 @@ alias dotfiles="/usr/bin/git --git-dir=${HOME}/.dotfiles.git/ --work-tree=${HOME
 echo ".dotfiles.git" >> .gitignore
 git clone --bare <git-repo-url> $HOME/.dotfiles.git
 dotfiles checkout
+dotfiles config --local status.showUntrackedFiles no
 ```

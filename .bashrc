@@ -96,7 +96,7 @@ green=$(tput setaf 2)
 blue=$(tput setaf 4)
 reset=$(tput sgr0)
 bold=$(tput bold)
-PS1='\[$blue$bold\]\w\[$reset\]\[$green$bold\]$(__git_ps1 " (%s)")\[$reset\]\n\$ '
+PS1='\[$green$bold\](\u@\h) \[$blue$bold\]\w\[$reset\]\[$green$bold\]$(__git_ps1 " (%s)")\[$reset\]\n\$ '
 
 
 # Many thanks: https://raw.github.com/mathiasbynens/dotfiles/master/.bash_profile
@@ -119,3 +119,5 @@ fi
 if [ -f /usr/share/doc/fzf/examples/completion.bash ]; then
     . /usr/share/doc/fzf/examples/completion.bash
 fi
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
