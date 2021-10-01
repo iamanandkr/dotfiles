@@ -4,3 +4,7 @@
 google() { xdg-open "http://www.google.com/search?q=$@"; }
 
 rtfm() { help $@ || man $@ || google $@; }
+
+function mkd() {
+	mkdir -p "$@" && cd "$_";
+}
