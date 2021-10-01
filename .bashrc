@@ -64,6 +64,12 @@ if ! shopt -oq posix; then
     . /usr/share/bash-completion/bash_completion
   elif [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
+  elif which brew &> /dev/null && [ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]; then
+    # Ensure existing Homebrew v1 completions continue to work
+    export BASH_COMPLETION_COMPAT_DIR="$(brew --prefix)/etc/bash_completion.d";
+    source "$(brew --prefix)/etc/profile.d/bash_completion.sh";
+  elif [ -f /usr/local/etc/bash_completion ]; then
+    . /usr/local/etc/bash_completion
   fi
 fi
 
@@ -121,3 +127,6 @@ if [ -f /usr/share/doc/fzf/examples/completion.bash ]; then
 fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+
+[ -f ~/schrodinger.sh ] && source ~/schrodinger.sh
