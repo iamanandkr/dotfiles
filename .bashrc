@@ -130,3 +130,8 @@ fi
 
 
 [ -f ~/schrodinger.sh ] && source ~/schrodinger.sh
+
+SCHNIPPETS="$HOME/builds/schnippets/bash/functions"
+if [[ -e "$SCHNIPPETS" ]]; then
+    . $SCHNIPPETS/autoyapf.sh
+fi
