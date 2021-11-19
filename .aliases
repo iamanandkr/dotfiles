@@ -7,7 +7,6 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
-alias --="cd -"
 
 
 # Press F1 to open the file with less without leaving fzfi
