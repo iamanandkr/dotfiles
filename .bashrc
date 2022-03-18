@@ -56,15 +56,9 @@ if [ -f ~/.functions ]; then
     . ~/.functions
 fi
 
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
+# enable programmable completion features.
 if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  elif which brew &> /dev/null && [ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]; then
+  if which brew &> /dev/null && [ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]; then
     # Ensure existing Homebrew v1 completions continue to work
     export BASH_COMPLETION_COMPAT_DIR="$(brew --prefix)/etc/bash_completion.d";
     source "$(brew --prefix)/etc/profile.d/bash_completion.sh";
@@ -104,30 +98,15 @@ reset=$(tput sgr0)
 bold=$(tput bold)
 PS1='\[$green$bold\](\u@\h) \[$blue$bold\]\w\[$reset\]\[$green$bold\]$(__git_ps1 " (%s)")\[$reset\]\n\$ '
 
-
 # Many thanks: https://raw.github.com/mathiasbynens/dotfiles/master/.bash_profile
 # Add tab completion for SSH hostnames based on ~/.ssh/config, ignoring wildcards
 [ -e "$HOME/.ssh/config" ] && complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2)" scp sftp ssh
-
 
 # git bare repository to manage dotfiles
 alias dotfiles="/usr/bin/git --git-dir=${HOME}/.dotfiles.git/ --work-tree=${HOME}"
 
 
-# Many thanks:
-# https://github.com/junegunn/fzf/blob/master/shell/completion.bash
-# https://github.com/junegunn/fzf/blob/master/shell/key-bindings.bash
-# fzf key bindings and autocompletion for bash.
-if [ -f /usr/share/doc/fzf/examples/key-bindings.bash ]; then
-    . /usr/share/doc/fzf/examples/key-bindings.bash
-fi
-
-if [ -f /usr/share/doc/fzf/examples/completion.bash ]; then
-    . /usr/share/doc/fzf/examples/completion.bash
-fi
-
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
 
 [ -f ~/schrodinger.sh ] && source ~/schrodinger.sh
 
