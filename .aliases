@@ -7,7 +7,6 @@ alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
-alias -- -="cd -"
 
 
 # Press F1 to open the file with less without leaving fzfi
@@ -56,3 +55,22 @@ alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && kil
 
 
 alias g="git"
+alias gstatus="git status"
+alias gdiff="git diff"
+alias gdiffc="git diff --cached"
+alias gadd="git add"
+
+
+
+
+
+alias pg_start="brew services start postgresql@10"
+alias pg_stop="brew services stop postgresql@10"
+alias pg_restart="brew services restart postgresql@10"
+
+
+alias run_glados="cd ~/code/glados/ && yarn run server"
+
+
+alias ta="tmux attach-session -t"
+alias tn="tmux new-session -s"
