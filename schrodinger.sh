@@ -8,11 +8,13 @@ function sdgr() {
     export SCHRODINGER=/Users/$USER/builds/$branch/build;
     # source $SCHRODINGER_SRC/mmshare/build_env -b;
 }
-alias 22-3='sdgr 2022-3'
+alias 22-4='sdgr 2022-4'
 
 alias src='cd $SCHRODINGER_SRC'
-alias ssch='source $SCHRODINGER_SRC/mmshare/build_env -b'
+alias ssch='source $SCHRODINGER_SRC/mmshare/build_env'
 alias mm='cd ${SCHRODINGER_SRC}/mmshare'
+alias mmb='cd ${SCHRODINGER}/mmshare-v*/'
+alias mmt='cd ${SCHRODINGER}/mmshare-v*/python/test'
 alias bld='cd $SCHRODINGER'
 alias mm_build='cd ${SCHRODINGER}/mmshare-v*'
 alias mm_test='cd ${SCHRODINGER}/mmshare-v*/python/test'
@@ -48,3 +50,10 @@ alias mmlog='less $SCHRODINGER/mmshare-v*/make_mmshare_all.log'
 
 alias mps='make python-scripts'
 alias mpm='make python-modules'
+
+
+# Background builder
+alias bg-builder='$SCHRODINGER/run $SCHRODINGER_SRC/mmshare/build_tools/background_builder.py'
+alias pyrun='$SCHRODINGER/run $SCHRODINGER_SRC/mmshare/build_tools/background_run.py'
+alias autorun='$SCHRODINGER/run $SCHRODINGER_SRC/mmshare/build_tools/autobuild.py'
+alias pymaestro='$SCHRODINGER/run $SCHRODINGER_SRC/mmshare/build_tools/background_run.py $SCHRODINGER/maestro -console'
