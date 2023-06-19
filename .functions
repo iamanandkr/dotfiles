@@ -1,10 +1,9 @@
 # Many thanks: https://github.com/christopheryoung/dotfiles/blob/master/.functions
 
-# Quick help
-google() { xdg-open "http://www.google.com/search?q=$@"; }
+# Navigation help
+mkd() { mkdir -p $@ && cd $_; }
 
-rtfm() { help $@ || man $@ || google $@; }
 
-function mkd() {
-	mkdir -p "$@" && cd "$_";
-}
+# Command line help
+google() { open "http://www.google.com/search?q=$@"; }
+rtfm() { tldr $@ || help $@ || man $@ || google $@; }

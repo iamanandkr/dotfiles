@@ -12,60 +12,30 @@ case $- in
 esac
 
 
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
-HISTCONTROL=ignoreboth
-
-# append to the history file, don't overwrite it
-shopt -s histappend
-
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+# Bash environment variables to control history settings.
+# See https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html
+HISTCONTROL=ignoreboth  # Skip duplicates and commands beginning with a space
 HISTFILESIZE=100000000
 HISTSIZE=100000
-
-# Not everything in history is interesting
 HISTIGNORE="cd:ls:clear:exit"
+
+shopt -s histappend  # append to the history file, don't overwrite it
+
 
 # The next line allows me to share history between different screen terminals
 # Thank you https://spin.atomicobject.com/2016/05/28/log-bash-history/
 mkdir -p ~/.logs
-export PROMPT_COMMAND='if [ "$(id -u)" -ne 0 ]; then echo "$(date "+%Y-%m-%d.%H:%M:%S") $(pwd) $(history 1)" >> ~/.logs/bash-history-$(date "+%Y-%m-%d").log; fi'
+export PROMPT_COMMAND='if [ "$(id -u)" -ne 0 ]; then echo "$(date "+%Y-%m-%d.%H:%M:%S") $(pwd) $(history 1)" >> ~/.logs/bash-history-$(date "+%Y-%m-%d").log; fi;'
+
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
-# If set, the pattern "**" used in a pathname expansion context will
-# match all files and zero or more directories and subdirectories.
-#shopt -s globstar
-
-# make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-
-
-# Alias, function definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
-if [ -f ~/.aliases ]; then
-    . ~/.aliases
-fi
-
-if [ -f ~/.functions ]; then
-    . ~/.functions
-fi
 
 # enable programmable completion features.
-if ! shopt -oq posix; then
-  if which brew &> /dev/null && [ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]; then
-    # Ensure existing Homebrew v1 completions continue to work
-    export BASH_COMPLETION_COMPAT_DIR="$(brew --prefix)/etc/bash_completion.d";
-    source "$(brew --prefix)/etc/profile.d/bash_completion.sh";
-  elif [ -f /usr/local/etc/bash_completion ]; then
-    . /usr/local/etc/bash_completion
-  fi
-fi
+[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
+
 
 # Many thanks: https://github.com/git/git/blob/master/contrib/completion/git-completion.bash (v2.33.0)
 if [ ! -f ${HOME}/code/git/git-completion.bash ]; then
@@ -98,19 +68,44 @@ reset=$(tput sgr0)
 bold=$(tput bold)
 PS1='\[$green$bold\](\u@\h) \[$blue$bold\]\w\[$reset\]\[$green$bold\]$(__git_ps1 " (%s)")\[$reset\]\n\$ '
 
-# Many thanks: https://raw.github.com/mathiasbynens/dotfiles/master/.bash_profile
-# Add tab completion for SSH hostnames based on ~/.ssh/config, ignoring wildcards
-[ -e "$HOME/.ssh/config" ] && complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2)" scp sftp ssh
 
 # git bare repository to manage dotfiles
 alias dotfiles="/usr/bin/git --git-dir=${HOME}/.dotfiles.git/ --work-tree=${HOME}"
+
+
+# Alias, function definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
 
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
 [ -f ~/schrodinger.sh ] && source ~/schrodinger.sh
 
+if [ -f ~/.aliases ]; then
+    . ~/.aliases
+fi
+
+if [ -f ~/.functions ]; then
+    . ~/.functions
+fi
+
 SCHNIPPETS="$HOME/builds/schnippets/bash/functions"
 if [[ -e "$SCHNIPPETS" ]]; then
     . $SCHNIPPETS/autoyapf.sh
 fi
+
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
+
+# Many thanks: https://raw.github.com/mathiasbynens/dotfiles/master/.bash_profile
+# Add tab completion for SSH hostnames based on ~/.ssh/config, ignoring wildcards
+[ -e "$HOME/.ssh/config" ] && complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2- | tr ' ' '\n')" scp sftp ssh;
+
+# Enable tab completion for `g` by marking it as an alias for `git`
+if type _git &> /dev/null; then
+	complete -o default -o nospace -F _git g;
+fi;
+
+[ -f "/Users/anakumar/.ghcup/env" ] && source "/Users/anakumar/.ghcup/env" # ghcup-env

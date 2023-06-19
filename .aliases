@@ -5,18 +5,11 @@
 # Easier navigation
 alias ..="cd .."
 alias ...="cd ../.."
-alias ....="cd ../../.."
-alias .....="cd ../../../.."
 
 
 # Press F1 to open the file with less without leaving fzfi
 # Press CTRL-Y to copy the line to clipboard and aborts fzf (requires pbcopy)
 alias fzf="fzf --bind 'f1:execute(less -f {}),ctrl-y:execute-silent(echo {} | pbcopy)+abort'"
-
-
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 
 # Print each PATH entry on a separate line
@@ -55,9 +48,9 @@ alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && kil
 
 
 alias g="git"
-alias gstatus="git status"
-alias gdiff="git diff"
-alias gdiffc="git diff --cached"
+alias gs="git status"
+alias gd="git diff"
+alias gdc="git diff --cached"
 alias gadd="git add"
 
 
@@ -74,3 +67,12 @@ alias run_glados="cd ~/code/glados/ && yarn run server"
 
 alias ta="tmux attach-session -t"
 alias tn="tmux new-session -s"
+
+
+alias broo="docker build --build-arg CHEMISTRY_PACKAGE=indigo -f Dockerfile-multistage -t mcneilco/acas-roo-server-oss:dev ."
+
+alias dc="docker-compose"
+
+
+# TODO:
+# 1. An "alert" alias for alerting when a long running program is done.
