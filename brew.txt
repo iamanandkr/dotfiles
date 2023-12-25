@@ -1,0 +1,10 @@
+# export HOMEBREW_NO_INSTALL_FROM_API=1
+# /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+
+bash-completion@2 fzf gh neovim node pre-commit reattach-to-user-namespace tmux tree
+
+gh auth login
+gh extension install github/gh-copilot
+
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+# Install tmux plugins: trigger-I

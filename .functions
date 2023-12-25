@@ -7,3 +7,27 @@ mkd() { mkdir -p $@ && cd $_; }
 # Command line help
 google() { open "http://www.google.com/search?q=$@"; }
 rtfm() { tldr $@ || help $@ || man $@ || google $@; }
+
+copilot() {
+    args=("$@")
+    # default (suggest); other options: explain
+    if [[ ! " ${args[@]} " =~ " explain " ]]; then
+        args=("suggest" "${args[@]}")
+    fi
+    # default (shell); other options: gh, git
+    if [[ " ${args[@]} " =~ " suggest " ]] && [[ ! " ${args[@]} " =~ " -t " ]] && [[ ! " ${args[@]} " =~ " --target " ]]; then
+        args=("--target" "shell" "${args[@]}")
+    fi
+    gh copilot "${args[@]}"
+}
+
+
+show_notification() {
+    # Usage: show_notification "Title" "Message"
+    title="$1"
+    message="$2"
+    if [[ -z "$message" ]]; then
+        message=$title
+    fi
+    osascript -e "display notification \"$message\" with title \"$title\""
+}

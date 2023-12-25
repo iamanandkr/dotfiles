@@ -35,7 +35,7 @@ shopt -s checkwinsize
 
 # enable programmable completion features.
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
-
+[[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
 
 # Many thanks: https://github.com/git/git/blob/master/contrib/completion/git-completion.bash (v2.33.0)
 if [ ! -f ${HOME}/code/git/git-completion.bash ]; then
@@ -66,7 +66,7 @@ green=$(tput setaf 2)
 blue=$(tput setaf 4)
 reset=$(tput sgr0)
 bold=$(tput bold)
-PS1='\[$green$bold\](\u@\h) \[$blue$bold\]\w\[$reset\]\[$green$bold\]$(__git_ps1 " (%s)")\[$reset\]\n\$ '
+PS1='\[$green$bold\]\u@mbp: \[$blue$bold\]\w\[$reset\]\[$green$bold\]$(__git_ps1 " (%s)")\[$reset\]\n\$ '
 
 
 # git bare repository to manage dotfiles
@@ -108,4 +108,6 @@ if type _git &> /dev/null; then
 	complete -o default -o nospace -F _git g;
 fi;
 
-[ -f "/Users/anakumar/.ghcup/env" ] && source "/Users/anakumar/.ghcup/env" # ghcup-env
+export PATH="/usr/local/bin:$PATH"
+source <(kubectl completion bash)
+

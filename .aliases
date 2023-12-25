@@ -76,3 +76,21 @@ alias dc="docker-compose"
 
 # TODO:
 # 1. An "alert" alias for alerting when a long running program is done.
+
+# ACAS
+function select-acas-release() {
+    [[ -n "$1" ]] || echo "select-acas-release needs an argument (e.g. select-acas-release 2023.1)"
+    branch=$1;
+    export ACAS_TAG=release-$branch.x
+}
+
+alias a23-1='select-acas-release 2023.1'
+alias a23-2='select-acas-release 2023.2'
+alias a23-3='select-acas-release 2023.3'
+
+alias dca="docker-compose -f ~/LiveDesign/acas/docker-compose.yml"
+alias broo="DOCKER_BUILDKIT=1 docker build --build-arg CHEMISTRY_PACKAGE=indigo -f Dockerfile-multistage -t mcneilco/acas-roo-server-oss:dev-indigo . && dca up -d"
+
+# Copilot
+alias ce="gh copilot explain"
+alias cs="gh copilot suggest -t shell "
