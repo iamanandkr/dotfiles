@@ -11,6 +11,8 @@ case $- in
       *) return;;
 esac
 
+source ~/.bash_utils.sh
+
 
 # Bash environment variables to control history settings.
 # See https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html
