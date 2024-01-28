@@ -1,14 +1,14 @@
-# Many thanks: https://github.com/christopheryoung/dotfiles/blob/master/.functions
-
-# Navigation help
-mkd() { mkdir -p $@ && cd $_; }
-
-
-# Command line help
-google() { open "http://www.google.com/search?q=$@"; }
-rtfm() { tldr $@ || help $@ || man $@ || google $@; }
-
+# Search in GitHub CLI Copilot.
+# We can use "suggest" or "explain" command.
+# If we use "suggest", we can use "--target" as "shell" or "gh" or "git".
+# We default to "gh copilot suggest --target shell"
 copilot() {
+    # Help
+    if [[ " ${args[@]} " =~ " -h" ]] || [[ " ${args[@]} " =~ " --help" ]]; then
+        gh copilot "${args[@]}"
+        return 0
+    fi
+
     args=("$@")
     # default (suggest); other options: explain
     if [[ ! " ${args[@]} " =~ " explain " ]]; then
@@ -18,16 +18,45 @@ copilot() {
     if [[ " ${args[@]} " =~ " suggest " ]] && [[ ! " ${args[@]} " =~ " -t " ]] && [[ ! " ${args[@]} " =~ " --target " ]]; then
         args=("--target" "shell" "${args[@]}")
     fi
+
     gh copilot "${args[@]}"
 }
 
 
+# Navigation help
+mkd() { mkdir -p $@ && cd $_; }
+
+# Command line help
+
+# Search in Google.
+# Usage: google "search query"
+google() {
+    if _is_darwin; then
+        open "http://www.google.com/search?q=$@";
+    elif _is_linux; then
+        xdg-open "http://www.google.com/search?q=$@";
+    else
+        _error "Unsupported OS";
+        return 1;
+    fi
+}
+
+
+# Show notification with title and message.
+# Usage: show_notification "Title" "Message"
 show_notification() {
-    # Usage: show_notification "Title" "Message"
     title="$1"
     message="$2"
     if [[ -z "$message" ]]; then
         message=$title
     fi
-    osascript -e "display notification \"$message\" with title \"$title\""
+
+    if _is_darwin; then
+        osascript -e "display notification \"$message\" with title \"$title\""
+    elif _is_linux; then
+        notify-send "$title" "$message"
+    else
+        _error "Unsupported OS";
+        return 1;
+    fi
 }

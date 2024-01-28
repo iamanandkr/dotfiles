@@ -12,6 +12,13 @@ case $- in
 esac
 
 source ~/.bash_utils.sh
+[ -f ~/schrodinger.sh ] && source ~/schrodinger.sh
+[ -f ~/acas.sh ] && source ~/acas.sh
+
+if _is_darwin; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
 
 
 # Bash environment variables to control history settings.
@@ -83,7 +90,6 @@ alias dotfiles="/usr/bin/git --git-dir=${HOME}/.dotfiles.git/ --work-tree=${HOME
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-[ -f ~/schrodinger.sh ] && source ~/schrodinger.sh
 
 if [ -f ~/.aliases ]; then
     . ~/.aliases
