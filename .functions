@@ -32,9 +32,9 @@ mkd() { mkdir -p $@ && cd $_; }
 # Usage: google "search query"
 google() {
     if _is_darwin; then
-        open "http://www.google.com/search?q=$@";
+        open -a "Google Chrome" "https://www.google.com/"
     elif _is_linux; then
-        xdg-open "http://www.google.com/search?q=$@";
+        xdg-open "https://www.google.com"
     else
         _error "Unsupported OS";
         return 1;

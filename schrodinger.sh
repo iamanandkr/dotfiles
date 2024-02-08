@@ -76,12 +76,13 @@ function _init_license() {
     mkdir -p $license_fpath
 
     if [[ -z $(find $license_fpath -name "*.lic") ]]; then
-        _warning "No license file found in $license_fpath."
+        _warning "No license file found in $license_fpath. Generate one from " \
+            "https://sites.google.com/schrodinger.com/internal/software > Employee Licensing Wizard"
         return 1
     fi
-    
-    export SCHRODINGER_LICENSE=$license_fpath
-    _info "SCHRODINGER_LICENSE is set to $SCHRODINGER_LICENSE"
+
+    export SCHROD_LICENSE_FILE=$license_fpath
+    _info "SCHROD_LICENSE_FILE is set to $SCHROD_LICENSE_FILE"
 }
 
 _init_license
@@ -321,7 +322,7 @@ function mtest() {
         args="--post-test $args"
     fi
 
-    make test TEST_ARGS="$args" | tee $(_get_mtest_log_path)
+    make test TEST_ARGS="$args" 2>&1 | tee $(_get_mtest_log_path)
 }
 
 
@@ -352,8 +353,7 @@ function _post_buildinger() {
         # if scisol is installed then symlink scisol-src modules
         ln -s -f $SCHRODINGER/scisol-v*/lib/*/python_packages/scisol/*/ \
             $site_packages/schrodinger/application/scisol/packages > /dev/null 2>&1
-    fi
-    if [ -z "$(find $site_packages/schrodinger/application/scisol/packages -name *.pyi)" ]; then
+    else
         _warning "Failed to setup scisol autocomplete in IDE."
     fi
 }
@@ -380,9 +380,9 @@ function buildinger() {
 
 
 # Show build logs. We show mmshare and maestro logs.
-# Usage: buildinger_logs
-function buildinger_logs() {
-    _sdgr_debug "buildinger_logs"
+# Usage: b_logs
+function b_logs() {
+    _sdgr_debug "b_logs"
 
     _check_variable SCHRODINGER
     [[ $? -eq 0 ]] || return 1
@@ -445,15 +445,16 @@ function _create_venv() {
     _check_variable SCHRODINGER
     [[ $? -eq 0 ]] || return 1
 
-    local branch=$(_get_build_branch_name)
-    srun schrodinger_virtualenv.py ~/.virtualenvs/$branch
+    local branch_name=$(_get_build_branch_name)
+    srun schrodinger_virtualenv.py ~/.virtualenvs/$branch_name
 
     if [[ $? -ne 0 ]]; then
-        _error "Error creating Schrodinger virtualenv for $branch."
+        _error "Error creating Schrodinger virtualenv for $branch_name."
         return 1
-    else
-        _success  "Created Schrodinger virtualenv in ~/.virtualenvs/$branch"
     fi
+    _success  "Created Schrodinger virtualenv in ~/.virtualenvs/$branch_name"
+
+    # TODO: Install ipdb in virtualenv.
 }
 
 
@@ -465,8 +466,9 @@ function svenv() {
     _check_variable SCHRODINGER
     [[ $? -eq 0 ]] || return 1
 
+    local branch_name=$(_get_build_branch_name)
     # If "create" is passed as an argument then create the virtualenv.
-    if [[ $1 == "create" || ! -d ~/.virtualenvs/$_get_build_branch_name ]]; then
+    if [[ $1 == "create" || ! -d ~/.virtualenvs/$branch_name ]]; then
         _create_venv
     fi
 
@@ -547,3 +549,6 @@ function stmux() {
     tmux detach-client -a -s $branch
     tmux attach-session -t $branch
 }
+
+
+# ==============================================================================
