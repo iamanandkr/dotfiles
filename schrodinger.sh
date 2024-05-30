@@ -7,6 +7,7 @@
 # Show debug messages.
 _SCHRODINGER_DEBUG=0
 
+# PYTHONBREAKPOINT=ipdb.set_trace
 
 # Set the value of _SCHRODINGER_HOME based on the operating system. _SCHRODINGER_HOME is the
 # directory in which schrodinger core suite development happens.
@@ -88,6 +89,28 @@ function _init_license() {
 _init_license
 
 
+# Set the FEP+ Web Services access file path. It looks for a .FEPplus_web_access_file in
+# $_SCHRODINGER_HOME/fep_web_services/.
+# Usage: _init_fep_web_services_access
+function _init_fep_web_services_access() {
+    _sdgr_debug "_init_fep_web_services_access"
+
+    local fep_web_services_access_fpath=$_SCHRODINGER_HOME/fep_web_services/.FEPplus_web_access_file
+
+    if [[ -z $(find $fep_web_services_access_fpath) ]]; then
+        _warning "No FEP+ Web Services access file found in $fep_web_services_access_fpath. " \
+            "Contact the FEP+ Web Services team."
+        return 1
+    fi
+
+    export FEP_WEB_SERVICES_ACCESS_FILE=$fep_web_services_access_fpath
+    _info "FEP_WEB_SERVICES_ACCESS_FILE is set to $FEP_WEB_SERVICES_ACCESS_FILE"
+}
+
+
+_init_fep_web_services_access
+
+
 # Selects a build for the shell session.
 # Usage: _select_build <branch_name> (e.g. _select_build 2021-3)
 function _select_build() {
@@ -143,10 +166,9 @@ alias srun='${SCHRODINGER}/run'
 alias sjsc='${SCHRODINGER}/jsc'  # Job Server Client
 
 # Building
-alias mp='cd $SCHRODINGER/mmshare-v*/ && make python && cd -'
-alias mps='cd $SCHRODINGER/mmshare-v*/ && make python-scripts && cd -'
-alias mpm='cd $SCHRODINGER/mmshare-v*/ && make python-modules && cd -'
-
+# TODO: On Linux execute this command in the centos7 environment.
+alias mp='make -C $SCHRODINGER/mmshare-v*/ python'
+alias ms='make -C $SCHRODINGER/scisol-v* all'
 
 if _is_linux; then
     alias centos7='make -C $_SCHRODINGER_HOME/buildenvs/centos7 shell'
@@ -351,11 +373,15 @@ function _post_buildinger() {
     _sdgr_debug "Setting up scisol autocomplete in IDE"
     if [ -d $SCHRODINGER/scisol-v* ]; then
         # if scisol is installed then symlink scisol-src modules
+        _sdgr_debug "scisol source: $SCHRODINGER/scisol-v*/lib/*/python_packages/scisol/*/"
+        _sdgr_debug "scisol destination: $site_packages/schrodinger/application/scisol/packages"
         ln -s -f $SCHRODINGER/scisol-v*/lib/*/python_packages/scisol/*/ \
             $site_packages/schrodinger/application/scisol/packages > /dev/null 2>&1
     else
         _warning "Failed to setup scisol autocomplete in IDE."
     fi
+
+    # $SCHRODINGER/run python3 -m pip install ipdb
 }
 
 
@@ -516,8 +542,8 @@ function stmux() {
         tmux send-keys -t $branch:0 "$name && mm"  C-m
         _attempt_to_source_build_env 0
 
-        # build & test
-        tmux new-window -t $branch:1 -n build/test
+        # test
+        tmux new-window -t $branch:1 -n test
         if _is_linux; then
             # On Linux we can only build inside the centos7 environment
             tmux send-keys -t $branch:1 "centos7"  C-m
@@ -549,6 +575,3 @@ function stmux() {
     tmux detach-client -a -s $branch
     tmux attach-session -t $branch
 }
-
-
-# ==============================================================================
