@@ -2,20 +2,23 @@
 # We can use "suggest" or "explain" command.
 # If we use "suggest", we can use "--target" as "shell" or "gh" or "git".
 # We default to "gh copilot suggest --target shell"
-copilot() {
+co() {
+    local args
+    args=("$@")
+
     # Help
-    if [[ " ${args[@]} " =~ " -h" ]] || [[ " ${args[@]} " =~ " --help" ]]; then
+    if [[ " ${args[*]} " =~ " -h" ]] || [[ " ${args[*]} " =~ " --help" ]]; then
         gh copilot "${args[@]}"
         return 0
     fi
 
-    args=("$@")
-    # default (suggest); other options: explain
-    if [[ ! " ${args[@]} " =~ " explain " ]]; then
+    # Default to 'suggest' if 'explain' is not found
+    if [[ ! " ${args[*]} " =~ " explain " ]]; then
         args=("suggest" "${args[@]}")
     fi
-    # default (shell); other options: gh, git
-    if [[ " ${args[@]} " =~ " suggest " ]] && [[ ! " ${args[@]} " =~ " -t " ]] && [[ ! " ${args[@]} " =~ " --target " ]]; then
+
+    # Default target to 'shell' if 'suggest' is used without a target
+    if [[ " ${args[*]} " =~ " suggest " ]] && [[ ! " ${args[*]} " =~ " -t " ]] && [[ ! " ${args[*]} " =~ " --target " ]]; then
         args=("--target" "shell" "${args[@]}")
     fi
 
@@ -30,7 +33,7 @@ mkd() { mkdir -p $@ && cd $_; }
 
 # Search in Google.
 # Usage: google "search query"
-google() {
+goo() {
     if _is_darwin; then
         open -a "Google Chrome" "https://www.google.com/"
     elif _is_linux; then
@@ -59,4 +62,19 @@ show_notification() {
         _error "Unsupported OS";
         return 1;
     fi
+}
+
+
+# Show find
+find() {
+    local args
+    args=("$@")
+
+    # Help
+    if [[ " ${args[*]} " =~ " -h" ]] || [[ " ${args[*]} " =~ " --help" ]]; then
+        command find --help
+        return 0
+    fi
+
+    command find "${args[@]}"
 }

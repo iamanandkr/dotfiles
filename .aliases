@@ -2,22 +2,15 @@
 # https://github.com/mathiasbynens/dotfiles/blob/master/.aliases
 # https://github.com/christopheryoung/dotfiles/blob/master/.aliases
 
-# Colorize the ls output
-alias ls="command ls --color"
-
 
 # Navigation
 alias ..="cd .."
 alias ...="cd ../.."
 
 
-# Git aliases
-alias g="git"
-alias gs="git status"
-alias gd="git diff"
-alias gdc="git diff --cached"
-alias gadd="git add"
-
-
 # Print each PATH entry on a separate line
 alias path='echo -e ${PATH//:/\\n}'
+
+
+# git bare repository to manage dotfiles
+alias dotfiles="/usr/bin/git --git-dir=${HOME}/.dotfiles.git/ --work-tree=${HOME}"

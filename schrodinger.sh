@@ -56,7 +56,7 @@ function _check_variable() {
 function _get_build_branch_name() {
     _sdgr_debug "_get_build_branch_name"
 
-    _check_variable SCHRODINGER
+    # _check_variable SCHRODINGER
     [[ $? -eq 0 ]] || return 1
 
     # $SCHRODINGER is a path like "$_SCHRODINGER_HOME/branch-name/build".
@@ -68,25 +68,25 @@ function _get_build_branch_name() {
 # SCHRODINGER build environment
 # ==============================================================================
 
-# Set the license file path. It looks for a *.lic file in $_SCHRODINGER_HOME/licenses/.
-# Usage: _init_license
-function _init_license() {
-    _sdgr_debug "_init_license"
+# # Set the license file path. It looks for a *.lic file in $_SCHRODINGER_HOME/licenses/.
+# # Usage: _init_license
+# function _init_license() {
+#     _sdgr_debug "_init_license"
 
-    local license_fpath=$_SCHRODINGER_HOME/licenses/
-    mkdir -p $license_fpath
+#     local license_fpath=$_SCHRODINGER_HOME/licenses/
+#     mkdir -p $license_fpath
 
-    if [[ -z $(find $license_fpath -name "*.lic") ]]; then
-        _warning "No license file found in $license_fpath. Generate one from " \
-            "https://sites.google.com/schrodinger.com/internal/software > Employee Licensing Wizard"
-        return 1
-    fi
+#     if [[ -z $(find $license_fpath -name "*.lic") ]]; then
+#         _warning "No license file found in $license_fpath. Generate one from " \
+#             "https://sites.google.com/schrodinger.com/internal/software > Employee Licensing Wizard"
+#         return 1
+#     fi
 
-    export SCHROD_LICENSE_FILE=$license_fpath
-    _info "SCHROD_LICENSE_FILE is set to $SCHROD_LICENSE_FILE"
-}
+#     export SCHROD_LICENSE_FILE=$license_fpath
+#     _info "SCHROD_LICENSE_FILE is set to $SCHROD_LICENSE_FILE"
+# }
 
-_init_license
+# _init_license
 
 
 # Set the FEP+ Web Services access file path. It looks for a .FEPplus_web_access_file in
@@ -110,6 +110,7 @@ function _init_fep_web_services_access() {
 
 _init_fep_web_services_access
 
+export SCHRODINGER_CCACHE_MAX_SIZE=8GB # default is 4GB
 
 # Selects a build for the shell session.
 # Usage: _select_build <branch_name> (e.g. _select_build 2021-3)
@@ -122,11 +123,12 @@ function _select_build() {
     fi
 
     branch=$1;
-    export SCHRODINGER_LIB=$_SCHRODINGER_HOME/software/lib;
+    # export SCHRODINGER_LIB=$_SCHRODINGER_HOME/software/lib;
     export SCHRODINGER_SRC=$_SCHRODINGER_HOME/$branch/source;
     export SCHRODINGER=$_SCHRODINGER_HOME/$branch/build;
 
-    _info "SCHRODINGER_LIB is set to $SCHRODINGER_LIB"
+
+    # _info "SCHRODINGER_LIB is set to $SCHRODINGER_LIB"
     _info "SCHRODINGER_SRC is set to $SCHRODINGER_SRC"
     _info "SCHRODINGER is set to $SCHRODINGER"
 }
@@ -154,7 +156,7 @@ _create_release_aliases
 # Navigation Source
 alias src='cd $SCHRODINGER_SRC'
 alias mm='cd ${SCHRODINGER_SRC}/mmshare'
-alias ss='cd ${SCHRODINGER_SRC}/scisol-src'
+alias ss='cd ${SCHRODINGER_SRC}/scisojwl-src'
 # Navigation Build
 alias bld='cd $SCHRODINGER'
 alias mmb='cd ${SCHRODINGER}/mmshare-v*/'
@@ -163,7 +165,8 @@ alias ssb='cd ${SCHRODINGER}/scisol-v*/'
 
 # Schrodinger command
 alias srun='${SCHRODINGER}/run'
-alias sjsc='${SCHRODINGER}/jsc'  # Job Server Client
+alias jsc='${SCHRODINGER}/jsc'  # Job Server Client
+alias jws='${SCHRODINGER}/jws'  # Web Services
 
 # Building
 # TODO: On Linux execute this command in the centos7 environment.
@@ -186,7 +189,7 @@ fi
 function _get_centos7_build_env_path() {
     _sdgr_debug "_get_centos7_build_env_path"
 
-    _check_variable SCHRODINGER
+    # _check_variable SCHRODINGER
     [[ $? -eq 0 ]] || return 1
 
     local branch=$(_get_build_branch_name)
@@ -199,7 +202,7 @@ function _get_centos7_build_env_path() {
 function ssch() {
     _sdgr_debug "ssch"
 
-    _check_variable SCHRODINGER_SRC
+    # _check_variable SCHRODINGER_SRC
     [[ $? -eq 0 ]] || return 1
 
     if _is_darwin || _is_windows; then
@@ -254,7 +257,7 @@ alias pymaestro='srun $SCHRODINGER_SRC/mmshare/build_tools/background_run.py mae
 function maestro() {
     _sdgr_debug "maestro"
 
-    _check_variable SCHRODINGER
+    # _check_variable SCHRODINGER
     [[ $? -eq 0 ]] || return 1
 
     if _is_darwin; then
@@ -278,7 +281,7 @@ function maestro() {
 function sdesigner() {
     _sdgr_debug "sdesigner"
 
-    _check_variable QTDIR "Did you forget to source the build environment?"
+    # _check_variable QTDIR "Did you forget to source the build environment?"
     [[ $? -eq 0 ]] || return 1
 
     if _is_darwin; then
@@ -311,7 +314,7 @@ function sdesigner() {
 function _get_mtest_log_path() {
     _sdgr_debug "_get_mtest_log_path"
 
-    _check_variable SCHRODINGER_SRC
+    # _check_variable SCHRODINGER_SRC
     [[ $? -eq 0 ]] || return 1
 
     echo $(dirname $SCHRODINGER_SRC)/mtest.log
@@ -324,7 +327,7 @@ function _get_mtest_log_path() {
 function mtest_log() {
     _sdgr_debug "mtest_log"
 
-    _check_variable SCHRODINGER_SRC
+    # _check_variable SCHRODINGER_SRC
     [[ $? -eq 0 ]] || return 1
 
     _open_text_file $(_get_mtest_log_path)
@@ -336,15 +339,16 @@ function mtest_log() {
 function mtest() {
     _sdgr_debug "mtest"
 
-    _check_variable SCHRODINGER_SRC
+    # _check_variable SCHRODINGER_SRC
     [[ $? -eq 0 ]] || return 1
 
     args="${*}"
-    if [[ $args == *"/scisol/"* ]]; then
-        args="--post-test $args"
-    fi
+    # if [[ $args == *"/scisol/"* ]]; then
+    #     args="--post-test $args"
+    # fi
 
-    make test TEST_ARGS="$args" 2>&1 | tee $(_get_mtest_log_path)
+    make test -C $SCHRODINGER/mmshare-v*/python/test TEST_ARGS="$args"
+    # make test -C $SCHRODINGER/mmshare-v*/python/test TEST_ARGS="$args" 2>&1 | tee $(_get_mtest_log_path)
 }
 
 
@@ -357,29 +361,30 @@ function mtest() {
 function _post_buildinger() {
     _sdgr_debug "_post_buildinger"
 
-    _check_variable SCHRODINGER
-    [[ $? -eq 0 ]] || return 1
+    # _check_variable SCHRODINGER
+    # [[ $? -eq 0 ]] || return 1
 
-    local site_packages=$SCHRODINGER/internal/lib/python*/site-packages
+    # local site_packages
+    # site_packages=$(echo $SCHRODINGER/internal/lib/python*/site-packages)
 
-    _sdgr_debug "Setting up Qt autocomplete in IDE"
-    if [ -z "$(find $site_packages/schrodinger/Qt -name *.pyi)" ]; then
-        cp -f $(find $SCHRODINGER_LIB -name *.pyi) $site_packages/schrodinger/Qt > /dev/null 2>&1
-    fi
-    if [ -z "$(find $site_packages/schrodinger/Qt -name *.pyi)" ]; then
-        _warning "Failed to setup Qt autocomplete in IDE."
-    fi
+    # _sdgr_debug "Setting up Qt autocomplete in IDE"
+    # if [ -z "$(find $site_packages/schrodinger/Qt -name '*.pyi')" ]; then
+    #     cp -f $(find $SCHRODINGER_LIB -name '*.pyi') $site_packages/schrodinger/Qt > /dev/null 2>&1
+    # fi
+    # if [ -z "$(find $site_packages/schrodinger/Qt -name '*.pyi')" ]; then
+    #     _warning "Failed to setup Qt autocomplete in IDE."
+    # fi
 
-    _sdgr_debug "Setting up scisol autocomplete in IDE"
-    if [ -d $SCHRODINGER/scisol-v* ]; then
-        # if scisol is installed then symlink scisol-src modules
-        _sdgr_debug "scisol source: $SCHRODINGER/scisol-v*/lib/*/python_packages/scisol/*/"
-        _sdgr_debug "scisol destination: $site_packages/schrodinger/application/scisol/packages"
-        ln -s -f $SCHRODINGER/scisol-v*/lib/*/python_packages/scisol/*/ \
-            $site_packages/schrodinger/application/scisol/packages > /dev/null 2>&1
-    else
-        _warning "Failed to setup scisol autocomplete in IDE."
-    fi
+    # _sdgr_debug "Setting up scisol autocomplete in IDE"
+    # if [ -d $SCHRODINGER/scisol-v* ]; then
+    #     # if scisol is installed then symlink scisol-src modules
+    #     _sdgr_debug "scisol source: $SCHRODINGER/scisol-v*/lib/*/python_packages/scisol/*/"
+    #     _sdgr_debug "scisol destination: $site_packages/schrodinger/application/scisol/packages"
+    #     ln -s -f $SCHRODINGER/scisol-v*/lib/*/python_packages/scisol/*/ \
+    #         $site_packages/schrodinger/application/scisol/packages > /dev/null 2>&1
+    # else
+    #     _warning "Failed to setup scisol autocomplete in IDE."
+    # fi
 
     # $SCHRODINGER/run python3 -m pip install ipdb
 }
@@ -390,7 +395,10 @@ function _post_buildinger() {
 function buildinger() {
     _sdgr_debug "buildinger"
 
-    local args="${*}"
+    echo "When loading configuration from ~/.buildinger, use -p"
+
+    local args=("$@")
+    echo "$SCHRODINGER_SRC/mmshare/build_tools/buildinger.sh $args"
     $SCHRODINGER_SRC/mmshare/build_tools/buildinger.sh $args
 
     if [[ $? -eq 0 ]]; then
@@ -399,9 +407,12 @@ function buildinger() {
 
     # Notify when done.
     if _is_darwin; then
-        show_notification "Buildinger" "Buildinger done"
+        if [[ -n "$ZSH_VERSION" ]]; then
+            osascript -e 'display notification "Buildinger done" with title "Buildinger"'
+        else
+            show_notification "Buildinger" "Buildinger done"
+        fi
     fi
-
 }
 
 
@@ -410,7 +421,7 @@ function buildinger() {
 function b_logs() {
     _sdgr_debug "b_logs"
 
-    _check_variable SCHRODINGER
+    # _check_variable SCHRODINGER
     [[ $? -eq 0 ]] || return 1
 
     local mm_log_fpath=$SCHRODINGER/mmshare-v*/make_mmshare_all.log
@@ -442,7 +453,7 @@ function switch_branches() {
         return 1
     fi
 
-    _check_variable SCHRODINGER_SRC
+    # _check_variable SCHRODINGER_SRC
     [[ $? -eq 0 ]] || return 1
 
     _info "\$SCHRODINGER_SRC is set to $SCHRODINGER_SRC"
@@ -468,7 +479,7 @@ function switch_branches() {
 function _create_venv() {
     _sdgr_debug "_create_venv"
 
-    _check_variable SCHRODINGER
+    # _check_variable SCHRODINGER
     [[ $? -eq 0 ]] || return 1
 
     local branch_name=$(_get_build_branch_name)
@@ -489,7 +500,7 @@ function _create_venv() {
 function svenv() {
     _sdgr_debug "svenv"
 
-    _check_variable SCHRODINGER
+    # _check_variable SCHRODINGER
     [[ $? -eq 0 ]] || return 1
 
     local branch_name=$(_get_build_branch_name)
@@ -574,4 +585,122 @@ function stmux() {
     fi
     tmux detach-client -a -s $branch
     tmux attach-session -t $branch
+}
+
+
+# ==============================================================================
+# Job Server
+# ==============================================================================
+
+function _get_schrodinger_version() {
+    _sdgr_debug "_get_schrodinger_version"
+
+    # _check_variable SCHRODINGER
+    [[ $? -eq 0 ]] || return 1
+
+    local fpath=$SCHRODINGER/version.txt
+    echo $(cat $fpath | awk '{print $NF}')
+}
+
+
+function set_map_bolt_schrodinger() {
+    _sdgr_debug "map_bolt_schrodinger"
+
+    # _check_variable SCHRODINGER
+    [[ $? -eq 0 ]] || return 1
+
+    local branch=$(_get_build_branch_name)
+    local build=$(_get_schrodinger_version)
+    local bolt_schrodinger="/nfs/working/builds/NB/$branch/build-$build"
+    $SCHRODINGER/jsc job-schrodinger-map set --job-schrodinger $bolt_schrodinger boltsub3.schrodinger.com
+}
+
+function remove_map_bolt_schrodinger() {
+    _sdgr_debug "remove_map_bolt_schrodinger"
+
+    # _check_variable SCHRODINGER
+    [[ $? -eq 0 ]] || return 1
+
+    $SCHRODINGER/jsc job-schrodinger-map remove boltsub3.schrodinger.com
+}
+
+
+# ==============================================================================
+# GitHub PRs
+# ==============================================================================
+
+function create_pr() {
+    local branch=$(git rev-parse --abbrev-ref HEAD)
+
+    if [[ $branch != pr/* ]]; then
+        _error "Branch name should start with 'pr/'."
+        return 1
+    fi
+
+    git push -u github HEAD:$branch
+}
+
+function delete_pr() {
+    local branch=$1
+
+    if [[ $branch != pr/* ]]; then
+        _error "Branch name should start with 'pr/'."
+        return 1
+    fi
+
+    git push github --delete $branch && git branch -D $branch
+}
+
+
+alias build_env='source $SCHRODINGER_SRC/mmshare/build_env'
+alias mmcode='build_env && srun code $SCHRODINGER_SRC/mmshare'
+
+
+# ==============================================================================
+# Jira
+# ==============================================================================
+
+function jira () {
+    local branch_name
+    branch_name=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+
+    if [[ -z "$branch_name" ]]; then
+        echo "Not a Git repository or no branch found."
+        return 1
+    fi
+
+    local jira_base_url="https://schrodinger.atlassian.net/browse"
+
+    # Extract JIRA ticket from branch name (assuming format like JIRA-1234-description)
+    if [[ "$branch_name" =~ ([a-zA-Z]+-[0-9]+) ]]; then
+        local jira_ticket="${BASH_REMATCH[1]}"
+        python -m webbrowser "$jira_base_url/$jira_ticket"
+    else
+        echo "Branch name does not contain a valid JIRA ticket."
+        return 1
+    fi
+}
+
+# export -f jira
+
+
+SCHNIPPETS="$HOME/builds/schnippets/bash/functions"
+if [[ -e "$SCHNIPPETS" ]]; then
+    source $SCHNIPPETS/autoyapf.sh
+fi
+
+
+function sync_mb_desklu133() {
+    _sdgr_debug "sync_mb_desklu133"
+
+    local DEFAULT_DIR_ON_DESKLU133=/home/$USER/sync
+    local DEFAULT_DIR_ON_MB=/Users/anakumar/sync
+    # Create destination directory if it doesn't exist
+    ssh $USER@desk-lu133 "mkdir -p $DEFAULT_DIR_ON_DESKLU133"
+    
+    # Sync from MB to desk-lu133 (adds files missing on desk-lu133)
+    rsync -avz --progress $DEFAULT_DIR_ON_MB/ $USER@desk-lu133:$DEFAULT_DIR_ON_DESKLU133/
+    
+    # Sync from desk-lu133 to MB (adds files missing on MB)
+    rsync -avz --progress $USER@desk-lu133:$DEFAULT_DIR_ON_DESKLU133/ $DEFAULT_DIR_ON_MB/
 }

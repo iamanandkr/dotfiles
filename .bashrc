@@ -1,6 +1,8 @@
 # Almost everything here has been taken from generous contributors.
 
 
+# alias python3="$(brew --prefix python@3.11)/libexec/bin/python3"
+
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -13,10 +15,14 @@ esac
 
 _BASHRC_DIR=~/.bashrc.d
 
-source ~/.bash_utils.sh
+source ~/.shell_utils.sh
 
 source ~/.aliases
 source ~/.functions
+
+
+# export TERM="xterm-256color"
+
 
 source $_BASHRC_DIR/autocomplete.sh
 source $_BASHRC_DIR/git.sh
@@ -27,13 +33,13 @@ if _is_darwin; then
 fi
 
 
-[ -f ~/acas.sh ] && source ~/acas.sh
+# [ -f ~/acas.sh ] && source ~/acas.sh
 [ -f ~/schrodinger.sh ] && source ~/schrodinger.sh
 
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
-shopt -s checkwinsize
+# shopt -s checkwinsize
 
 
 # enable programmable completion features.
@@ -46,8 +52,7 @@ bold=$(tput bold)
 PS1='\[$green$bold\]\u@mbp: \[$blue$bold\]\w\[$reset\]\[$green$bold\]$(__git_ps1 " (%s)")\[$reset\]\n\$ '
 
 
-# git bare repository to manage dotfiles
-alias dotfiles="/usr/bin/git --git-dir=${HOME}/.dotfiles.git/ --work-tree=${HOME}"
+
 
 
 # Alias, function definitions.
@@ -58,13 +63,6 @@ alias dotfiles="/usr/bin/git --git-dir=${HOME}/.dotfiles.git/ --work-tree=${HOME
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-
-
-
-SCHNIPPETS="$HOME/builds/schnippets/bash/functions"
-if [[ -e "$SCHNIPPETS" ]]; then
-    . $SCHNIPPETS/autoyapf.sh
-fi
 
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
